@@ -1,0 +1,67 @@
+version: '3.1'
+
+services:
+
+  postgresql:
+    image: postgres
+    container_name: $PG_ALIAS
+    restart: always
+    environment:
+     POSTGRES_USER: $PG_USER
+     POSTGRES_PASSWORD: $PG_PASSWORD
+     PGPASSWORD: $PG_PASSWORD
+     POSTGRES_HOST_AUTH_METHOD: password
+    volumes:
+     - ./postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+     - ./postgresql/data:/var/lib/postgresql/data
+     - /etc/timezone:/etc/timezone
+     - /etc/localtime:/etc/localtime
+    networks:
+     - default
+
+  test1:
+    container_name: test1
+    restart: always
+    build: test1
+    ports:
+     - '$TEST1_PORT:$TEST1_PORT'
+    environment:
+     POSTGRES_ALIAS: $PG_ALIAS
+     POSTGRES_PORT: $PG_PORT
+     POSTGRES_USER: $PG_USER
+     POSTGRES_PASSWORD: $PG_PASSWORD
+     APP_PORT: $TEST1_PORT
+    volumes:
+     - ./test1/code:/code
+     - /etc/timezone:/etc/timezone
+     - /etc/localtime:/etc/localtime
+    networks:
+     - default
+    depends_on:
+     - postgresql
+
+  test2:
+    container_name: test2
+    restart: always
+    build: test2
+    ports:
+     - '$TEST2_PORT:$TEST2_PORT'
+    environment:
+     POSTGRES_ALIAS: $PG_ALIAS
+     POSTGRES_PORT: $PG_PORT
+     POSTGRES_USER: $PG_USER
+     POSTGRES_PASSWORD: $PG_PASSWORD
+     APP_PORT: $TEST2_PORT
+    volumes:
+     - ./test2/code:/code
+    networks:
+     - default
+    depends_on:
+     - postgresql
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.123.0.0/24
