@@ -43,13 +43,13 @@
 
 Отправляем аудиофайлы, два для первого пользователя и один для второго (вместо "токен 1" и "токен 2" подставить полученные на прошлом шаге токены):
 
-    curl -X POST -F 'audio=@sample1.wav' -F 'user_id=1' -F 'токен 1' localhost:65232/record
+    curl -X POST -F 'audio=@sample1.wav' -F 'user_id=1' -F 'user_uuid=токен 1' localhost:65232/record
     {"message": "File successfully uploaded", "url": "http://localhost:65232/record?id=1&user=1"}
     
-    curl -X POST -F 'audio=@sample2.wav' -F 'user_id=1' -F 'токен 1' localhost:65232/record
+    curl -X POST -F 'audio=@sample2.wav' -F 'user_id=1' -F 'user_uuid=токен 1' localhost:65232/record
     {"message": "File successfully uploaded", "url": "http://localhost:65232/record?id=2&user=1"}
     
-    curl -X POST -F 'audio=@sample3.wav' -F 'user_id=2' -F 'токен 2' localhost:65232/record
+    curl -X POST -F 'audio=@sample3.wav' -F 'user_id=2' -F 'user_uuid=токен 2' localhost:65232/record
     {"message": "File successfully uploaded", "url": "http://localhost:65232/record?id=3&user=2"}
 
 Если открыть полученные ссылки в браузере, скачаются сконвертированные семплы.
